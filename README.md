@@ -37,11 +37,11 @@ docker build -t df/jira:7.0.5
 3. start your new jira application container
 
 ```bash
-docker run -d -p 7990:7990 df/jira 
+docker run -d -p 8080:8080 df/jira 
 ```
 	
 4. finish your installation using atlassian's browser based configuration 
-just navigate to `http://[dockerhost]:7990` 
+just navigate to `http://[dockerhost]:8080` 
 
 
 ## Installation-Method 2, docker-compose (simple)

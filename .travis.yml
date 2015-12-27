@@ -14,7 +14,7 @@ before_install:
 script:
   # check normal docker build
   - docker build -t df/jira:7.0.5 .
-  - docker run --name df_jira -d -p 127.0.0.1:7990:7990 df/jira:7.0.5
+  - docker run --name df_jira -d -p 127.0.0.1:8080:8080 df/jira:7.0.5
   - docker ps | grep "df_jira"
   - docker logs df_jira
   - docker ps -aq | xargs docker rm -f

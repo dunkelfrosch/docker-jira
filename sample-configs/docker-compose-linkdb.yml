@@ -19,7 +19,7 @@ jira:
   container_name: df-atls-jira
 
   ports:
-    - "7990:7990"
+    - "8080:8080"
 
   privileged: false
   stdin_open: true

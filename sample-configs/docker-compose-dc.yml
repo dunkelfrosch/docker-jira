@@ -14,7 +14,7 @@ jira:
   container_name: df-atls-jira
 
   ports:
-    - "7990:7990"
+    - "8080:8080"
 
   volumes_from:
     - jira_data:rw
