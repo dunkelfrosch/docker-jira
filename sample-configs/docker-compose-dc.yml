@@ -1,0 +1,38 @@
+#
+# copy this file to your source root and execute: 'docker-compose -d -up jira'
+# inside your terminal.
+#
+# our jira core service container using a "shadow copy" of path defined in VOLUMES
+# section from another "data-only" container. this metod provide an additional protection
+# for container running in production systems, prevent data-loss if deleted main core
+# container accidentally.
+#
+jira:
+  restart: 'always'
+  # image: df/atls-jira:7.0.5
+  build: .
+  container_name: df-atls-jira
+
+  ports:
+    - "7990:7990"
+
+  volumes_from:
+    - jira_data:rw
+
+  privileged: false
+  stdin_open: true
+  tty: true
+
+#
+# our confluence data-only container
+#
+jira_data:
+  restart: 'no'
+  # image: df/atls-jira:7.0.5
+  build: .
+
+  privileged: false
+  stdin_open: false
+  tty: false
+
+  entrypoint: /bin/echo "data-only container for jira"
