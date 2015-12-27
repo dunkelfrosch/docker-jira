@@ -1,4 +1,4 @@
-# Contributing to DFDockerJira
+# Contributing to DockerJira
 
 Please note that this project is released with a [Contributor Code of Conduct](CONTRIBUTING_COC.md). By participating in this project you agree to abide by its terms.
 
@@ -17,10 +17,10 @@ Due to time constraints, we are not always able to respond as quickly as we woul
 
 The following commands can be used to perform the initial checkout of DFDockerConfluence:
 
-    git clone git://github.com/dunkelfrosch/DFDockerJira.git
-    cd DFDockerJira
+    git clone git://github.com/dunkelfrosch/docker-jira.git
+    cd docker-jira
 
 ## Reporting issues
 
 Please use the most specific issue tracker to search for existing tickets and to open new tickets:
-* [Issue Tracker](https://github.com/dunkelfrosch/DFDockerJira/issues)
+* [Issue Tracker](https://github.com/dunkelfrosch/docker-jira/issues)
