@@ -22,52 +22,52 @@ MySQL container configuration inside this documentation beside a docker-compose 
 ## Installation-Method 1, docker direct mode
 as long as our image isn't available via docker.io hub repository, you've to build it by yourself using this github repository. this steps will show you the generic, pure docker based installation of our jira image container, without any database container linked or data-container feature.  *We also will provide a docker-compose based installation in this documentation*.
 
-1. checkout this repository
+1) checkout this repository
 
 ```bash
 git clone https://github.com/dunkelfrosch/docker-jira.git .
 ```
 
-2. build jira (version 7.0.5) image on your local docker host, naming image "df/jira:7.0.5"
+2) build jira (version 7.0.5) image on your local docker host, naming image "df/jira:7.0.5"
 
 ```bash
 docker build -t df/jira:7.0.5
 ```
 
-3. start your new jira application container
+3) start your new jira application container
 
 ```bash
 docker run -d -p 8080:8080 df/jira 
 ```
 	
-4. finish your installation using atlassian's browser based configuration 
+4) finish your installation using atlassian's browser based configuration 
 just navigate to `http://[dockerhost]:8080` 
 
 
 ## Installation-Method 2, docker-compose (simple)
 this steps will show you an alternative way of jira service container installation using docker-compose
 
-1. checkout this repository
+1) checkout this repository
 
 ```bash
 git clone https://github.com/dunkelfrosch/docker-jira.git .
 ```
 
-2. create a docker-compose.yml file in your target directory (or using the existing one), insert the following lines (docker-compose.yml in ./sample-configs/ directory). 
+2) create a docker-compose.yml file in your target directory (or using the existing one), insert the following lines (docker-compose.yml in ./sample-configs/ directory). 
 
 ![](https://dl.dropbox.com/s/t31n8ckncv09np9/dc_setup_001.png)
 
-3. start your jira container by docker-compose
+3) start your jira container by docker-compose
 
 ```bash
 docker-compose up -d jira
 ```
 
-4. (optional) rename the resulting image after successful build (we'll use our image auto-name result here)
+4) (optional) rename the resulting image after successful build (we'll use our image auto-name result here)
 ```bash
 docker tag dfdockerjira_jira df/jira:7.0.5
 ```
-5. the result should by a running container and an available local jira image
+5) the result should by a running container and an available local jira image
 
 ![](https://dl.dropbox.com/s/oqwy8wquey5rjkh/dc_result_001.png)
 
