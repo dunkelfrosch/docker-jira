@@ -2,11 +2,11 @@
 
 *this documentation isn't fully done yet - we're still working on major and minor issues corresponding to this repository base!*
 
-This repository provides the latest version of Atlassians agile/ticket [JIRA](https://de.atlassian.com/software/jira) including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based JIRA installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on Github as soon as documentation is completed. *In this workbench we've combined several Atlassian products (JIRA, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
+This repository provides the latest version of Atlassians agile/ticket [JIRA](https://de.atlassian.com/software/jira) software including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based JIRA installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on Github as soon as documentation is completed. *In this workbench we've combined several Atlassian products (JIRA, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![System Version](https://img.shields.io/badge/version-0.9.7-blue.svg)](VERSION)
-[![Build Status](https://travis-ci.org/dunkelfrosch/docker-jira.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-jira)
+[![Build Status](https://Ftravis-ci.org/dunkelfrosch/docker-jira.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-jira)
 
 ## Preparation
 We recommend the [latest Docker version](https://github.com/docker/docker/blob/master/CHANGELOG.md).  For simple system integration and supervision we suggest [Docker Compose](https://docs.docker.com/compose/install/). If you're using MacOS or Windows as host operating system, you may take the advantage of [Docker Machine](https://www.docker.com/docker-machine) for Docker's VM management. JIRA requires a relational database like MySQL or PostgreSQL, so we'll provide a specific Docker Compose configuration file to showcase both a JIRA-MySQL link and a data-container feature configuration. Use the installation guides of provided links down below to comply your Docker preparation process.
@@ -25,16 +25,16 @@ As long as our image isn't available via docker.io hub repository, you will need
 git clone https://github.com/dunkelfrosch/docker-jira.git .
 ```
 
-2) build jira (version 7.0.5) image on your local docker host, naming image "df/jira:7.0.5"
+2) build jira (version 7.0.5) image on your local docker host, naming image "dunkelfrosch/jira:7.0.5"
 
 ```bash
-docker build -t df/jira:7.0.5
+docker build -t dunkelfrosch/jira:7.0.5
 ```
 
 3) start your new jira application container
 
 ```bash
-docker run -d -p 8080:8080 df/jira 
+docker run -d -p 8080:8080 dunkelfrosch/jira 
 ```
 	
 4) finish your installation using atlassian's browser based configuration 
@@ -63,7 +63,7 @@ docker-compose up -d jira
 4) (*optional*) rename the resulting image after successful build (we'll use our image auto-name result here)
 
 ```bash
-docker tag dfdockerjira_jira df/jira:7.0.5
+docker tag dfdockerjira_jira dunkelfrosch/jira:7.0.5
 ```
 
 5) the result should by a running container and an available local JIRA image

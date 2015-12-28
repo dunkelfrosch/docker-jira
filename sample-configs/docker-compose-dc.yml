@@ -9,7 +9,7 @@
 #
 jira:
   restart: 'always'
-  # image: df/atls-jira:7.0.5
+  # image: dunkelfrosch/jira:7.0.5
   build: .
   container_name: df-atls-jira
 
@@ -28,7 +28,7 @@ jira:
 #
 jira_data:
   restart: 'no'
-  # image: df/atls-jira:7.0.5
+  # image: dunkelfrosch/jira:7.0.5
   build: .
 
   privileged: false
