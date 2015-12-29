@@ -3,7 +3,7 @@
 # OS/CORE  : java:8
 # SERVICES : -
 #
-# VERSION 0.9.7
+# VERSION 0.9.8
 #
 
 FROM java:8
@@ -13,7 +13,7 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/jira" \
       com.container.priority="1" \
       com.container.project="jira" \
-      img.version="0.9.7" \
+      img.version="0.9.8" \
       img.description="atlassian jira application container"
 
 # Setup base environment variables
