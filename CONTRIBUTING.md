@@ -1,4 +1,4 @@
-# Contributing to DockerJira
+# Contributing to Docker Jira
 
 Please note that this project is released with a [Contributor Code of Conduct](CONTRIBUTING_COC.md). By participating in this project you agree to abide by its terms.
 
@@ -9,13 +9,13 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 Pull requests for bug fixes must be based on the current stable branch whereas pull requests for new features must be based on `master`.
 
-We are trying to keep backwards compatibility breaks in DockerJira to an absolute minimum. Please take this into account when proposing changes.
+We are trying to keep backwards compatibility breaks in Docker Jira to an absolute minimum. Please take this into account when proposing changes.
 
 Due to time constraints, we are not always able to respond as quickly as we would like. Please do not take delays personal and feel free to remind us if you feel that we forgot to respond.
 
-## Using DockerJira from a Git checkout
+## Using Docker Jira from a Git checkout
 
-The following commands can be used to perform the initial checkout of DockerJira:
+The following commands can be used to perform the initial checkout of Docker Jira:
 
     git clone git://github.com/dunkelfrosch/docker-jira.git
     cd docker-jira

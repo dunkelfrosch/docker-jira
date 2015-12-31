@@ -2,7 +2,7 @@
 
 *this documentation isn't fully done yet - we're still working on major and minor issues corresponding to this repository base!*
 
-This repository provides the latest version of Atlassians agile/ticket [JIRA](https://de.atlassian.com/software/jira) software including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based JIRA installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on Github as soon as documentation is completed. *In this workbench we've combined several Atlassian products (JIRA, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
+This repository provides the latest version of Atlassians agile/ticket [JIRA](https://de.atlassian.com/software/jira) software including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based JIRA installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on [Github](https://github.com/dunkelfrosch/docker-atlassian-wb) as soon as documentation is completed. *In this workbench we've combined several Atlassian products (JIRA, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![System Version](https://img.shields.io/badge/version-0.9.7-blue.svg)](VERSION)
@@ -101,7 +101,7 @@ docker exec -it --user root df-atls-jira /bin/bash
 
 ## Contribute
 
-Docker JIRA is still under development and contributors are always welcome! Feel free to join our docker-jira distributor team. Please refer to [CONTRIBUTING.md](https://github.com/dunkelfrosch/docker-jira/blob/master/CONTRIBUTING.md) and find out how to contribute to this Project.
+This project is still under development and contributors are always welcome! Please refer to [CONTRIBUTING.md](https://github.com/dunkelfrosch/docker-jira/blob/master/CONTRIBUTING.md) and find out how to contribute to this project.
 
 
 ## License-Term
