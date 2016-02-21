@@ -1,0 +1,53 @@
+#
+# this version of docker-compose can only be used up to version 1.6.n of docker-compose (docker 1.10.n+)
+#
+# copy this file to your source root and execute: 'docker-compose up -d jira'
+# inside your terminal.
+#
+# our jira service container, using mysql 5.6 as linked in service container.
+# you can access the linked db during jira setup using host "jira.mysql"
+# with user "root", password="secretpassword" and db="jira" now.
+#
+# jira need's special encoding of your database, unfortunately the entrypoint
+# script of official mysql image doesn't support encoding als environment based param.
+# you've create your own Dockerfile, extending the officially one and change your mysql
+# configuration file by yourself. check your atlassian workbench to see how we've done
+# that.
+#
+version: '2'
+services:
+  jira:
+    restart: 'always'
+    # image: dunkelfrosch/jira:7.1.0
+    build:
+      context: .
+
+    container_name: df-atls-jira
+
+    ports:
+      - "8080:8080"
+
+    privileged: false
+    stdin_open: true
+    tty: true
+
+    depends_on:
+      - jira_mysql
+
+    links:
+      - jira_mysql
+
+  jira_mysql:
+    restart: 'always'
+    image: mysql:5.6
+
+    environment:
+      MYSQL_DATABASE: 'jira'
+      MYSQL_ROOT_PASSWORD: 'secretpassword'
+
+    privileged: false
+    stdin_open: true
+    tty: true
+
+    volumes:
+      - ./etc/mysql/conf.d:/etc/mysql/conf.d

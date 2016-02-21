@@ -1,0 +1,24 @@
+#
+# this version of docker-compose can only be used up to version 1.6.n of docker-compose (docker 1.10.n+)
+#
+# copy this file to your source root and execute: 'docker-compose up -d jira'
+# inside your terminal.
+#
+# our jira service container
+#
+version: '2'
+services:
+  jira:
+    restart: 'always'
+    # image: dunkelfrosch/jira:7.1.0
+    build:
+      context: .
+
+    container_name: df-atls-jira
+
+    ports:
+      - "8080:8080"
+
+    privileged: false
+    stdin_open: true
+    tty: true
