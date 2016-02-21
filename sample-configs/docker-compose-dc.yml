@@ -1,5 +1,5 @@
 #
-# copy this file to your source root and execute: 'docker-compose -d -up jira'
+# copy this file to your source root and execute: 'docker-compose up -d jira'
 # inside your terminal.
 #
 # our jira core service container using a "shadow copy" of path defined in VOLUMES
@@ -9,7 +9,7 @@
 #
 jira:
   restart: 'always'
-  # image: dunkelfrosch/jira:7.0.5
+  # image: dunkelfrosch/jira:7.1.0
   build: .
   container_name: df-atls-jira
 
@@ -28,7 +28,7 @@ jira:
 #
 jira_data:
   restart: 'no'
-  # image: dunkelfrosch/jira:7.0.5
+  # image: dunkelfrosch/jira:7.1.0
   build: .
 
   privileged: false
