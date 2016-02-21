@@ -1,17 +1,28 @@
-# ChangeLog of DockerJira 0.9.8
+# ChangeLog of DockerJira 0.9.9
 
 All notable changes of the DockerJira release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-_This DockerJira changeLog documentation start with version 0.9.6 (2015-26-12)_
+_This DockerJira changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [0.9.8], 2015-29-12:
+## [0.9.9], 2016-02-20:
 _current_
+
+### Added
+- new sample files for docker compose format v2 (1.6.n)
+- new mysql config to provide utf8 compatibility for jira
+
+### Changes
+- upgrade jira to version 7.1.0
+- minor issues in docker-compose file definition
+- fix documentation issue in docker-compose sample files
+
+## [0.9.8], 2015-12-29:
 
 ### Changes
 fix namespace issues (prepare docker hub integration)
 minor documentation issues
 
-## [0.9.7], 2015-27-12:
+## [0.9.7], 2015-12-27:
 
 ### Changes
 extend main documentation
@@ -21,7 +32,7 @@ improve code documentation
 docker-compose sample yaml files
 travis build test
 
-## [0.9.6], 2015-26-12:
+## [0.9.6], 2015-12-26:
 
 ### Added
 initial commit
