@@ -1,4 +1,4 @@
-# Contributing to Docker Jira
+# Contributing to Docker JIRA
 
 Please note that this project is released with a [Contributor Code of Conduct](CONTRIBUTING_COC.md). By participating in this project you agree to abide by its terms.
 
