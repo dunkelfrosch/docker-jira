@@ -1,14 +1,17 @@
 #
+# copy this file to your source root and execute: 'docker-compose up -d jira'
+# inside your terminal.
+#
 # our jira service container
 #
 jira:
   restart: 'always'
-  # image: dunkelfrosch/jira:7.0.5
+  # image: dunkelfrosch/jira:7.1.0
   build: .
   container_name: df-atls-jira
 
   ports:
-    - "7990:7990"
+    - "8080:8080"
 
   privileged: false
   stdin_open: true
