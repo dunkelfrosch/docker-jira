@@ -1,7 +1,4 @@
 #
-# copy this file to your source root and execute: 'docker-compose up -d jira'
-# inside your terminal.
-#
 # our jira service container
 #
 jira:
