@@ -23,7 +23,7 @@ ENV DEBIAN_FRONTEND         noninteractive
 ENV TIMEZONE                "Europe/Berlin"
 
 # Setup application install environment variables
-ENV JIRA_VERSION            7.1.0
+ENV JIRA_VERSION            7.1.2
 ENV JIRA_HOME               "/var/atlassian/jira"
 ENV JIRA_INSTALL            "/opt/atlassian/jira"
 ENV DOWNLOAD_URL            "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-"

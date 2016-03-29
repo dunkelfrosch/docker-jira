@@ -12,7 +12,7 @@ _current_
 - new mysql config to provide utf8 compatibility for jira
 
 ### Changes
-- upgrade jira to version 7.1.0
+- upgrade jira to latest version 7.1 (7.1.2)
 - minor issues in docker-compose file definition
 - fix documentation issue in docker-compose sample files
 
