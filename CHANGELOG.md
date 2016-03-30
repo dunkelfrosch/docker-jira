@@ -14,7 +14,11 @@ _current_
 ### Changes
 - upgrade jira to latest version 7.1 (7.1.2)
 - minor issues in docker-compose file definition
+- default password for sample db config
+
+### Fixed
 - fix documentation issue in docker-compose sample files
+- fix minor changelog issues
 
 ## [0.9.8], 2015-12-29:
 
