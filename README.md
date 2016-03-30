@@ -56,7 +56,7 @@ _the initialization and base import of the db will take a while (may be up to 5 
 
 | MySQL Host         | username                   | password            | database            |
 |:------------------ |:-------------------------- |:------------------- |:------------------- |
-| df-atls-jira-mysql | root                       | secretpassword      | jira                |
+| df-atls-jira-mysql | root                       | please-change-me    | jira                |
 | (or) jira_mysql    |                            |                     |                     |
 
 4.1.3 Enter the name, mode and base url of your JIRA server
