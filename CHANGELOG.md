@@ -10,6 +10,7 @@ _current_
 ### Added
 - new sample files for docker compose format v2 (1.6.n)
 - new mysql config to provide utf8 compatibility for jira
+- travis ci command, remove latest image build
 
 ### Changes
 - upgrade jira to latest version 7.1 (7.1.2)
@@ -20,11 +21,13 @@ _current_
 - fix documentation issue in docker-compose sample files
 - fix minor changelog issues
 
+
 ## [0.9.8], 2015-12-29:
 
 ### Changes
 fix namespace issues (prepare docker hub integration)
 minor documentation issues
+
 
 ## [0.9.7], 2015-12-27:
 
@@ -35,6 +38,7 @@ improve code documentation
 ### Added
 docker-compose sample yaml files
 travis build test
+
 
 ## [0.9.6], 2015-12-26:
 
