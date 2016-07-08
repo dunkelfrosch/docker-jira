@@ -3,7 +3,7 @@
 #
 jira:
   restart: 'always'
-  # image: dunkelfrosch/jira:7.1.0
+  # image: dunkelfrosch/jira:7.1.9
   build: .
   container_name: df-atls-jira
 

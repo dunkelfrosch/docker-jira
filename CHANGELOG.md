@@ -1,11 +1,16 @@
-# ChangeLog of DockerJira 0.9.9
+# ChangeLog of DockerJira 1.0.0
 
 All notable changes of the DockerJira release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 _This DockerJira changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [0.9.9], 2016-02-20:
+## [1.0.0], 2016-07-08:
 _current_
+
+### Changes
+- upgrade jira to latest version 7.1 (7.1.9)
+
+## [0.9.9], 2016-02-20:
 
 ### Added
 - new sample files for docker compose format v2 (1.6.n)

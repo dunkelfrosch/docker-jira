@@ -3,7 +3,7 @@
 # OS/CORE  : java:8
 # SERVICES : -
 #
-# VERSION 0.9.9
+# VERSION 1.0.0
 #
 
 FROM java:8
@@ -13,7 +13,7 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/jira" \
       com.container.priority="1" \
       com.container.project="jira" \
-      img.version="0.9.9" \
+      img.version="1.0.0" \
       img.description="atlassian jira application container"
 
 # Setup base environment variables
@@ -23,7 +23,7 @@ ENV DEBIAN_FRONTEND         noninteractive
 ENV TIMEZONE                "Europe/Berlin"
 
 # Setup application install environment variables
-ENV JIRA_VERSION            7.1.2
+ENV JIRA_VERSION            7.1.9
 ENV JIRA_HOME               "/var/atlassian/jira"
 ENV JIRA_INSTALL            "/opt/atlassian/jira"
 ENV DOWNLOAD_URL            "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-"
