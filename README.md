@@ -1,4 +1,4 @@
-# Docker Image for Atlassian JIRA 7.1.9
+# Docker Image for Atlassian JIRA 7.3.0
 
 This repository provides the latest version of Atlassians agile/ticket [JIRA](https://de.atlassian.com/software/jira) software including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based JIRA installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on [Github](https://github.com/dunkelfrosch/docker-atlassian-wb) as soon as documentation is completed. *In this workbench we've combined several Atlassian products (JIRA, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
 
@@ -24,10 +24,10 @@ These steps will show you the generic, pure docker-based installation of Atlassi
 git clone https://github.com/dunkelfrosch/docker-jira.git .
 ```
 
-2.1) build your JIRA image (version 7.1.9) on your local docker host, naming image "dunkelfrosch/jira:7.1.9"
+2.1) build your JIRA image (version 7.3.0) on your local docker host, naming image "dunkelfrosch/jira:7.3.0" (or 'latest')
 
 ```bash
-docker build -t dunkelfrosch/jira:7.1.9
+docker build -t dunkelfrosch/jira:latest
 ```
 
 2.2) pull our compiled JIRA image from docker-hub directly by activating the corresponding lines in our docker-compose.yml file
@@ -114,7 +114,7 @@ docker-compose up -d jira
 4) (*optional*) rename the resulting image after successful build (we'll use our image auto-name result here)
 
 ```bash
-docker tag dfdockerjira_jira dunkelfrosch/jira:7.1.9
+docker tag dfdockerjira_jira dunkelfrosch/jira:7.3.0
 ```
 
 5) the result should by a running container and an available local JIRA image
@@ -167,7 +167,7 @@ This project is still under development and contributors are always welcome! Ple
 
 ## License-Term
 
-Copyright (c) 2015-2016 Patrick Paechnatz <patrick.paechnatz@gmail.com>
+Copyright (c) 2015-2017 Patrick Paechnatz <patrick.paechnatz@gmail.com>
                                                                            
 Permission is hereby granted,  free of charge,  to any  person obtaining a 
 copy of this software and associated documentation files (the "Software"),
