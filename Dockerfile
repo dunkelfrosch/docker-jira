@@ -11,6 +11,7 @@ FROM java:8
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/jira" \
+      com.container.service.verion="7.3.0" \
       com.container.priority="1" \
       com.container.project="jira" \
       img.version="1.0.0" \
@@ -23,7 +24,7 @@ ENV DEBIAN_FRONTEND         noninteractive
 ENV TIMEZONE                "Europe/Berlin"
 
 # Setup application install environment variables
-ENV JIRA_VERSION            7.1.9
+ENV JIRA_VERSION            7.3.0
 ENV JIRA_HOME               "/var/atlassian/jira"
 ENV JIRA_INSTALL            "/opt/atlassian/jira"
 ENV DOWNLOAD_URL            "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-"
@@ -65,7 +66,7 @@ RUN echo "${TIMEZONE}" >/etc/timezone \
 # home directory needs to be persisted as well as parts of the installation
 # directory (accessing logs). These directories will be set-and-used during
 # data-only container volume bound run-mode.
-# VOLUME ["${JIRA_INSTALL}", "${JIRA_HOME}"]
+VOLUME ["${JIRA_INSTALL}", "${JIRA_HOME}"]
 
 # Expose default HTTP connector port.
 EXPOSE 8080
