@@ -13,7 +13,7 @@ version: '2'
 services:
   jira:
     restart: 'always'
-    # image: dunkelfrosch/jira:7.1.0
+    # image: dunkelfrosch/jira
     build:
       context: .
 
@@ -37,7 +37,7 @@ services:
   #
   jira_data:
     restart: 'no'
-    # image: dunkelfrosch/jira:7.1.0
+    # image: dunkelfrosch/jira
     build:
       context: .
 
