@@ -66,7 +66,7 @@ RUN echo "${TIMEZONE}" >/etc/timezone \
 # home directory needs to be persisted as well as parts of the installation
 # directory (accessing logs). These directories will be set-and-used during
 # data-only container volume bound run-mode.
-VOLUME ["${JIRA_INSTALL}", "${JIRA_HOME}"]
+# VOLUME ["${JIRA_INSTALL}", "${JIRA_HOME}"]
 
 # Expose default HTTP connector port.
 EXPOSE 8080
