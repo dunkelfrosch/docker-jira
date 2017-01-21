@@ -4,8 +4,15 @@ All notable changes of the DockerJira release series are documented in this file
 
 _This DockerJira changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [1.0.0], 2016-07-08:
+## [1.0.1], 2017-01-21
 _current_
+
+### Changes
+- upgrade jira to latest version 7.3 (7.3.0)
+- add new service version label
+
+
+## [1.0.0], 2016-07-08:
 
 ### Changes
 - upgrade jira to latest version 7.1 (7.1.9)
