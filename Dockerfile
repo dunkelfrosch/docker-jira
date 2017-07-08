@@ -11,7 +11,7 @@ FROM java:8
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/jira" \
-      com.container.service.verion="7.3.0" \
+      com.container.service.verion="7.4.0" \
       com.container.priority="1" \
       com.container.project="jira" \
       img.version="1.0.0" \
@@ -24,7 +24,7 @@ ENV DEBIAN_FRONTEND         noninteractive
 ENV TIMEZONE                "Europe/Berlin"
 
 # Setup application install environment variables
-ENV JIRA_VERSION            7.3.0
+ENV JIRA_VERSION            7.4.0
 ENV JIRA_HOME               "/var/atlassian/jira"
 ENV JIRA_INSTALL            "/opt/atlassian/jira"
 ENV DOWNLOAD_URL            "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-"
