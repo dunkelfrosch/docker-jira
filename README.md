@@ -5,7 +5,7 @@ This repository provides the latest version of Atlassians agile/ticket [JIRA](ht
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![System Version](https://img.shields.io/badge/version-1.0.2-blue.svg)](VERSION1)
 [![JIRA Version](https://img.shields.io/badge/jira-7.4.0-blue.svg)](VERSION2)
-[![Build Status](https://travis-ci.org/dunkelfrosch/docker-jira.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-jira)
+[![Build Status](https://api.travis-ci.org/dunkelfrosch/docker-jira.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-jira)
 
 
 ## Preparation
