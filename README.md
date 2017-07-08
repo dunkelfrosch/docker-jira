@@ -1,10 +1,11 @@
-# Docker Image for Atlassian JIRA 7.3.0
+# Docker Image for Atlassian JIRA
 
 This repository provides the latest version of Atlassians agile/ticket [JIRA](https://de.atlassian.com/software/jira) software including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based JIRA installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on [Github](https://github.com/dunkelfrosch/docker-atlassian-wb) as soon as documentation is completed. *In this workbench we've combined several Atlassian products (JIRA, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
-[![System Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](VERSION)
-[![Build Status](https://Ftravis-ci.org/dunkelfrosch/docker-jira.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-jira)
+[![System Version](https://img.shields.io/badge/version-1.0.2-blue.svg)](VERSION)
+[![JIRA Version](https://img.shields.io/badge/jira-7.4.0-blue.svg)](JIRA VERSION)
+[![Build Status](https://travis-ci.org/dunkelfrosch/docker-jira.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-jira)
 
 
 ## Preparation
