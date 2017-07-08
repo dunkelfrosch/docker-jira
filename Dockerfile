@@ -3,7 +3,7 @@
 # OS/CORE  : java:8
 # SERVICES : -
 #
-# VERSION 1.0.0
+# VERSION 1.0.2
 #
 
 FROM java:8
@@ -14,25 +14,23 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service.verion="7.4.0" \
       com.container.priority="1" \
       com.container.project="jira" \
-      img.version="1.0.0" \
+      img.version="1.0.2" \
       img.description="atlassian jira application container"
 
 # Setup base environment variables
-ENV TERM                    xterm
-ENV LC_ALL                  C.UTF-8
-ENV DEBIAN_FRONTEND         noninteractive
-ENV TIMEZONE                "Europe/Berlin"
-
-# Setup application install environment variables
-ENV JIRA_VERSION            7.4.0
-ENV JIRA_HOME               "/var/atlassian/jira"
-ENV JIRA_INSTALL            "/opt/atlassian/jira"
-ENV DOWNLOAD_URL            "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-"
-ENV JVM_MYSQL_CONNECTOR_URL "http://dev.mysql.com/get/Downloads/Connector-J"
-ENV JVM_MYSQL_CONNETOR      "mysql-connector-java-5.1.36"
-ENV JAVA_HOME               "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
-ENV RUN_USER                daemon
-ENV RUN_GROUP               daemon
+ENV TERM="xterm" \
+    LC_ALL="C.UTF-8" \
+    DEBIAN_FRONTEND="noninteractive" \
+    TIMEZONE="Europe/Berlin" \
+    JIRA_VERSION="7.4.0" \
+    JIRA_HOME="/var/atlassian/jira" \
+    JIRA_INSTALL="/opt/atlassian/jira" \
+    DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-" \
+    JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
+    JVM_MYSQL_CONNETOR="mysql-connector-java-5.1.36" \
+    JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64" \
+    RUN_USER="daemon" \
+    RUN_GROUP=daemon
 
 # x-layer 1: package manager related processor
 RUN apt-get update -qq \
