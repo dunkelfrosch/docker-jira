@@ -4,8 +4,20 @@ All notable changes of the DockerJira release series are documented in this file
 
 _This DockerJira changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [1.0.2], 2017-07-08
+
+## [1.0.3], 2018-04-17
 _current_
+
+### Changes
+- upgrade jira to version 7.9 (7.9.0)
+- switch to new alpine jdk8 base image
+- massive refactoring of core docker image
+
+### Added
+- new crowd trusted keystore ssl (letsencrypt)
+
+
+## [1.0.2], 2017-07-08
 
 ### Changes
 - upgrade jira to version 7.4 (7.4.0)

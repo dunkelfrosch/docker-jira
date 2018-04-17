@@ -1,80 +1,118 @@
 #
 # BUILD    : DF/[ATLASSIAN][JIRA]
-# OS/CORE  : java:8
-# SERVICES : -
+# OS/CORE  : dunkelfrosch/alpine-jdk8
+# SERVICES : ntp, ...
 #
-# VERSION 1.0.2
+# VERSION 1.0.3
 #
 
-FROM java:8
+FROM dunkelfrosch/alpine-jdk8
 
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/jira" \
-      com.container.service.verion="7.4.0" \
+      com.container.service.verion="7.9.0" \
       com.container.priority="1" \
       com.container.project="jira" \
-      img.version="1.0.2" \
+      img.version="1.0.3" \
       img.description="atlassian jira application container"
 
-# Setup base environment variables
+ARG ISO_LANGUAGE=en
+ARG ISO_COUNTRY=US
+ARG JIRA_VERSION=7.9.0
+ARG JIRA_PRODUCT=jira-software
+ARG MYSQL_CONNECTOR_VERSION=5.1.46
+ARG DOCKERIZE_VERSION=v0.6.1
+
 ENV TERM="xterm" \
-    LC_ALL="C.UTF-8" \
-    DEBIAN_FRONTEND="noninteractive" \
     TIMEZONE="Europe/Berlin" \
-    JIRA_VERSION="7.4.0" \
-    JIRA_HOME="/var/atlassian/jira" \
-    JIRA_INSTALL="/opt/atlassian/jira" \
-    DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-core-" \
+    JIRA_USER=jira \
+    JIRA_GROUP=jira \
+    JIRA_CONTEXT_PATH=ROOT \
+    JIRA_HOME=/var/atlassian/jira \
+    JIRA_INSTALL=/opt/jira \
+    JIRA_SCRIPTS=/usr/local/share/atlassian \
     JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
-    JVM_MYSQL_CONNETOR="mysql-connector-java-5.1.36" \
-    JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64" \
-    RUN_USER="daemon" \
-    RUN_GROUP=daemon
+    DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary" \
+    RUN_USER="jira" \
+    RUN_GROUP="jira" \
+    RUN_UID=1000 \
+    RUN_GID=1000
 
-# x-layer 1: package manager related processor
-RUN apt-get update -qq \
-    && apt-get install -qq -y --no-install-recommends git liblucene2-java mc xmlstarlet ntp \
-    && apt-get clean autoclean \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/cache /var/lib/log /tmp/* /var/tmp/*
+ENV JAVA_HOME=$JIRA_INSTALL/jre
 
-# x-layer 2: application base setup related processor
-RUN mkdir -p ${JIRA_HOME}/lib \
-             ${JIRA_HOME}/caches/indexes \
+ENV PATH=$PATH:$JAVA_HOME/bin \
+    LANG=${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8
+
+COPY scripts/* ${JIRA_SCRIPTS}/
+
+RUN set -e && \
+    apk add --update ca-certificates gzip curl tar xmlstarlet wget tzdata bash tini && \
+    /usr/glibc-compat/bin/localedef -i ${ISO_LANGUAGE}_${ISO_COUNTRY} -f UTF-8 ${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8 && \
+    cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
+    echo "${TIMEZONE}" >/etc/timezone
+
+RUN mkdir -p ${JIRA_HOME}/caches/indexes \
              ${JIRA_INSTALL}/conf/Catalina \
-             ${JIRA_INSTALL}/lib \
+             ${JIRA_INSTALL}/lib && \
+    export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
+    echo https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
+    wget -q -P /tmp/ https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
+    mv /tmp/${JIRA_BIN} /tmp/jira.bin && chmod +x /tmp/jira.bin
 
-    && curl -Ls "${DOWNLOAD_URL}${JIRA_VERSION}.tar.gz" | tar -xz --directory "${JIRA_INSTALL}" --strip=1 \
-    && curl -Ls "${JVM_MYSQL_CONNECTOR_URL}/${JVM_MYSQL_CONNETOR}.tar.gz" | tar -xz --directory "${JIRA_INSTALL}/lib" --strip=1 --no-same-owner "${JVM_MYSQL_CONNETOR}/${JVM_MYSQL_CONNETOR}-bin.jar" \
-    && sed --in-place "s/java version/openjdk version/g" "${JIRA_INSTALL}/bin/check-java.sh" \
-    && echo -e "\njira.home=$JIRA_HOME" >> "${JIRA_INSTALL}/atlassian-jira/WEB-INF/classes/jira-application.properties" \
-    && chmod -R 700 ${JIRA_HOME} ${JIRA_INSTALL} \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL}
+RUN /tmp/jira.bin -q -varfile ${JIRA_SCRIPTS}/response.varfile
 
-# x-layer 3: application advanced setup related processor
-RUN echo "${TIMEZONE}" >/etc/timezone \
-    && dpkg-reconfigure tzdata >/dev/null 2>&1
+RUN set -e && \
+    export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x2-cross-signed.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x4-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx1 -file /tmp/letsencryptauthorityx1.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx2 -file /tmp/letsencryptauthorityx2.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx1 -file /tmp/lets-encrypt-x1-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx2 -file /tmp/lets-encrypt-x2-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx3 -file /tmp/lets-encrypt-x3-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der && \
+    wget -O /SSLPoke.class https://confluence.atlassian.com/kb/files/779355358/779355357/1/1441897666313/SSLPoke.class
 
-#
-# -> if you're running this jira container outside a workbench scenario, you
-#    can activate VOLUME feature ...
-#
-# Set volume mount points for installation and home directory. Changes to the
-# home directory needs to be persisted as well as parts of the installation
-# directory (accessing logs). These directories will be set-and-used during
-# data-only container volume bound run-mode.
-# VOLUME ["${JIRA_INSTALL}", "${JIRA_HOME}"]
+RUN wget -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz && \
+    rm /tmp/dockerize.tar.gz
 
-# Expose default HTTP connector port.
+RUN set -e && \
+    export CONTAINER_USER=$RUN_USER && \
+    export CONTAINER_GROUP=$RUN_GROUP &&  \
+    addgroup -g ${RUN_GID} ${RUN_GROUP} && \
+    adduser -u ${RUN_UID} \
+            -G ${RUN_GROUP} \
+            -h /home/${RUN_USER} \
+            -s /bin/sh \
+            -S ${RUN_USER}
+
+RUN set -e && \
+    rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
+    curl -Ls "${JVM_MYSQL_CONNECTOR_URL}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz" | tar -xz --strip-components=1 -C "/tmp" && \
+    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
+    chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS} /home/${JIRA_USER} && \
+    chmod -R 700 ${JIRA_HOME} ${JIRA_INSTALL} && \
+    apk del ca-certificates wget curl unzip tzdata && \
+    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+
+# --
+# define container execution behaviour
+# --
+
+USER jira
+
+VOLUME ["${JIRA_HOME}"]
+
+WORKDIR ${JIRA_HOME}
+
 EXPOSE 8080
 
-# Next, set the default working directory as jira home directory.
-WORKDIR ${JIRA_INSTALL}
+ENTRYPOINT ["/sbin/tini","--","/usr/local/share/atlassian/entrypoint.sh"]
 
-# Set base container execution user/group (no root-right container allowed here)
-# using the default unprivileged account.
-USER ${RUN_USER}:${RUN_GROUP}
-
-# Set entrypoint script for application, jira will run as foreground process (-fg)
-CMD ["/opt/atlassian/jira/bin/start-jira.sh", "-fg"]
+CMD ["jira"]

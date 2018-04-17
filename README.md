@@ -3,8 +3,8 @@
 This repository provides the latest version of Atlassians agile/ticket [JIRA](https://de.atlassian.com/software/jira) software including the recommended [MySQL java connector](http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.36.tar.gz) for an easy and painless docker based JIRA installation. Take note that this repository will be used inside our docker atlassian application workbench sources, which are also available on [Github](https://github.com/dunkelfrosch/docker-atlassian-wb) as soon as documentation is completed. *In this workbench we've combined several Atlassian products (JIRA, Confluence and Bitbucket) using advanced docker features like docker-compose based service management, data-container and links*
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
-[![System Version](https://img.shields.io/badge/version-1.0.2-blue.svg)](VERSION1)
-[![JIRA Version](https://img.shields.io/badge/jira-7.4.0-blue.svg)](VERSION2)
+[![System Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](VERSION1)
+[![JIRA Version](https://img.shields.io/badge/jira-7.9.0-blue.svg)](VERSION2)
 [![Build Status](https://api.travis-ci.org/dunkelfrosch/docker-jira.svg?branch=master)](https://travis-ci.org/dunkelfrosch/docker-jira)
 
 
@@ -168,7 +168,7 @@ This project is still under development and contributors are always welcome! Ple
 
 ## License-Term
 
-Copyright (c) 2015-2017 Patrick Paechnatz <patrick.paechnatz@gmail.com>
+Copyright (c) 2015-2018 Patrick Paechnatz <patrick.paechnatz@gmail.com>
                                                                            
 Permission is hereby granted,  free of charge,  to any  person obtaining a 
 copy of this software and associated documentation files (the "Software"),
