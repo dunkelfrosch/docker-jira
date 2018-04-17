@@ -9,7 +9,7 @@ rm -f /opt/atlassian-home/.jira-home.lock
 if [ "$JIRA_CONTEXT_PATH" == "ROOT" -o -z "$JIRA_CONTEXT_PATH" ]; then
   CONTEXT_PATH=
 else
-  CONTEXT_PATH="/$JIRA_CONTEXT_PATH"
+  CONTEXT_PATH="$JIRA_CONTEXT_PATH"
 fi
 
 xmlstarlet ed -P -S -L -u '//Context/@path' -v "$CONTEXT_PATH" ${JIRA_INSTALL}/conf/server.xml
