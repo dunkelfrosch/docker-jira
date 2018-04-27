@@ -32,11 +32,11 @@ ENV TERM="xterm" \
     JIRA_HOME=/var/atlassian/jira \
     JIRA_INSTALL=/opt/jira \
     JIRA_SCRIPTS=/usr/local/share/atlassian \
-    JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
+    MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
     DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary"
 
-ENV JAVA_HOME=$JIRA_INSTALL/jre
-ENV PATH=$PATH:$JAVA_HOME/bin \
+ENV JAVA_HOME=${JIRA_INSTALL}/jre
+ENV PATH=$PATH:${JAVA_HOME}/bin \
     LANG=${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8
 
 COPY scripts/* ${JIRA_SCRIPTS}/
@@ -70,7 +70,7 @@ RUN export MYSQL_CONNECTOR=mysql-connector-java-${MYSQL_CONNECTOR_VERSION:-5.1.3
     export MYSQL_CONNECTOR_TAR=${MYSQL_CONNECTOR}.tar.gz && \
     export MYSQL_CONNECTOR_BIN=${MYSQL_CONNECTOR}-bin.jar && \
     rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
-    wget -q -O /tmp/${MYSQL_CONNECTOR_TAR} ${JVM_MYSQL_CONNECTOR_URL}/${MYSQL_CONNECTOR_TAR} && \
+    wget -q -O /tmp/${MYSQL_CONNECTOR_TAR} ${MYSQL_CONNECTOR_URL}/${MYSQL_CONNECTOR_TAR} && \
     tar xzf /tmp/${MYSQL_CONNECTOR_TAR} --directory=/tmp && \
     mv /tmp/${MYSQL_CONNECTOR}/${MYSQL_CONNECTOR_BIN} ${JIRA_INSTALL}/lib/${MYSQL_CONNECTOR_BIN}
 
@@ -87,7 +87,7 @@ RUN export CONTAINER_USER=jira &&  \
             -S ${CONTAINER_USER}
 
 # install/setup keystore using host based letsencrypt CA (for growd sso)
-RUN export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
+RUN export KEYSTORE=${JAVA_HOME}/lib/security/cacerts && \
     wget -q -O /SSLPoke.class https://confluence.atlassian.com/kb/files/779355358/779355357/1/1441897666313/SSLPoke.class && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
@@ -100,7 +100,7 @@ RUN export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
     keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx1 -file /tmp/lets-encrypt-x1-cross-signed.der && \
     keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx2 -file /tmp/lets-encrypt-x2-cross-signed.der && \
     keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx3 -file /tmp/lets-encrypt-x3-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der
 
 # install (upgrade) new dockerized toolbox
 RUN wget -q -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
