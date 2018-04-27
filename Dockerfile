@@ -6,7 +6,7 @@
 # VERSION 1.0.4
 #
 
-FROM dunkelfrosch/alpine-jdk8
+FROM blacklabelops/alpine:3.7
 
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 LABEL com.container.vendor="dunkelfrosch impersonate" \
@@ -96,8 +96,8 @@ RUN set -e && \
     rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
     curl -Ls "${JVM_MYSQL_CONNECTOR_URL}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz" | tar -xz --strip-components=1 -C "/tmp" && \
     cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
-    chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS} /usr/local/share/atlassian && \
-    chmod -R 775 ${JIRA_HOME}/.. ${JIRA_INSTALL} /usr/local/share/atlassian && \
+    chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS}  && \
+    chmod -R 774 ${JIRA_HOME}/.. ${JIRA_INSTALL} ${JIRA_SCRIPTS} && \
     chown -R root:${RUN_GROUP} /opt/jdk* && \
     apk del ca-certificates wget curl unzip tzdata && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* /opt/jdk*.gz
