@@ -3,7 +3,7 @@
 # OS/CORE  : dunkelfrosch/alpine-jdk8
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.3
+# VERSION 1.0.4
 #
 
 FROM dunkelfrosch/alpine-jdk8
@@ -11,15 +11,15 @@ FROM dunkelfrosch/alpine-jdk8
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/jira" \
-      com.container.service.verion="7.9.0" \
+      com.container.service.verion="7.9.1" \
       com.container.priority="1" \
       com.container.project="jira" \
-      img.version="1.0.3" \
+      img.version="1.0.4" \
       img.description="atlassian jira application container"
 
 ARG ISO_LANGUAGE=en
 ARG ISO_COUNTRY=US
-ARG JIRA_VERSION=7.9.0
+ARG JIRA_VERSION=7.9.1
 ARG JIRA_PRODUCT=jira-software
 ARG MYSQL_CONNECTOR_VERSION=5.1.46
 ARG DOCKERIZE_VERSION=v0.6.1
@@ -88,16 +88,16 @@ RUN set -e && \
     addgroup -g ${RUN_GID} ${RUN_GROUP} && \
     adduser -u ${RUN_UID} \
             -G ${RUN_GROUP} \
-            -h /home/${RUN_USER} \
-            -s /bin/sh \
+            -h ${JIRA_HOME} \
+            -s /bin/false \
             -S ${RUN_USER}
 
 RUN set -e && \
     rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
     curl -Ls "${JVM_MYSQL_CONNECTOR_URL}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz" | tar -xz --strip-components=1 -C "/tmp" && \
     cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
-    chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS} /home/${JIRA_USER} && \
-    chmod -R 700 ${JIRA_HOME} ${JIRA_INSTALL} && \
+    chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS} /usr/local/share/atlassian && \
+    chmod -R 775 ${JIRA_HOME}/.. ${JIRA_INSTALL} /usr/local/share/atlassian && \
     apk del ca-certificates wget curl unzip tzdata && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
@@ -105,7 +105,7 @@ RUN set -e && \
 # define container execution behaviour
 # --
 
-USER jira
+USER ${RUN_USER}
 
 VOLUME ["${JIRA_HOME}"]
 
