@@ -34,8 +34,8 @@ ENV TERM="xterm" \
     JIRA_SCRIPTS=/usr/local/share/atlassian \
     JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
     DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary" \
-    RUN_USER="jira" \
-    RUN_GROUP="jira" \
+    RUN_USER=jira \
+    RUN_GROUP=jira \
     RUN_UID=1000 \
     RUN_GID=1000
 
@@ -98,8 +98,9 @@ RUN set -e && \
     cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
     chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS} /usr/local/share/atlassian && \
     chmod -R 775 ${JIRA_HOME}/.. ${JIRA_INSTALL} /usr/local/share/atlassian && \
+    chown -R root:${RUN_GROUP} /opt/jdk* && \
     apk del ca-certificates wget curl unzip tzdata && \
-    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* /opt/jdk*.gz
 
 # --
 # define container execution behaviour
