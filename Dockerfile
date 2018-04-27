@@ -33,21 +33,15 @@ ENV TERM="xterm" \
     JIRA_INSTALL=/opt/jira \
     JIRA_SCRIPTS=/usr/local/share/atlassian \
     JVM_MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
-    DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary" \
-    RUN_USER=jira \
-    RUN_GROUP=jira \
-    RUN_UID=1000 \
-    RUN_GID=1000
+    DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary"
 
 ENV JAVA_HOME=$JIRA_INSTALL/jre
-
 ENV PATH=$PATH:$JAVA_HOME/bin \
     LANG=${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8
 
 COPY scripts/* ${JIRA_SCRIPTS}/
 
-RUN set -e && \
-    apk add --update ca-certificates gzip curl tar xmlstarlet wget tzdata bash tini && \
+RUN apk add --update ca-certificates gzip curl tar xmlstarlet wget tzdata bash tini && \
     export GLIBC_VERSION=2.26-r0 && \
     wget --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
     apk add --allow-untrusted /tmp/glibc-${GLIBC_VERSION}.apk && \
@@ -69,8 +63,7 @@ RUN mkdir -p ${JIRA_HOME}/caches/indexes \
 
 RUN /tmp/jira.bin -q -varfile ${JIRA_SCRIPTS}/response.varfile
 
-RUN set -e && \
-    export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
+RUN export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
     wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.der && \
@@ -87,25 +80,24 @@ RUN set -e && \
 
 RUN wget -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
     tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz && \
-    rm /tmp/dockerize.tar.gz
+    rm -f /tmp/dockerize.tar.gz
 
-RUN set -e && \
-    export CONTAINER_USER=$RUN_USER && \
-    export CONTAINER_GROUP=$RUN_GROUP &&  \
-    addgroup -g ${RUN_GID} ${RUN_GROUP} && \
-    adduser -u ${RUN_UID} \
-            -G ${RUN_GROUP} \
-            -h ${JIRA_HOME} \
-            -s /bin/false \
-            -S ${RUN_USER}
+RUN export CONTAINER_USER=jira &&  \
+    export CONTAINER_UID=1000 &&  \
+    export CONTAINER_GROUP=jira &&  \
+    export CONTAINER_GID=1000 &&  \
+    addgroup -g ${CONTAINER_GID} ${CONTAINER_GROUP} && \
+    adduser -u ${CONTAINER_UID} \
+            -G ${CONTAINER_GROUP} \
+            -h /home/${CONTAINER_USER} \
+            -s /bin/bash \
+            -S ${CONTAINER_USER}
 
 RUN set -e && \
     rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
     curl -Ls "${JVM_MYSQL_CONNECTOR_URL}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz" | tar -xz --strip-components=1 -C "/tmp" && \
     cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
-    chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS}  && \
-    chmod -R 774 ${JIRA_HOME}/.. ${JIRA_INSTALL} ${JIRA_SCRIPTS} && \
-    chown -R root:${RUN_GROUP} /opt/jdk* && \
+    chown -R ${JIRA_USER}:${JIRA_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRIPTS} /home/${JIRA_USER}   && \
     apk del ca-certificates wget curl unzip tzdata && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* /opt/jdk*.gz
 
