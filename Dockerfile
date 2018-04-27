@@ -47,8 +47,8 @@ RUN mkdir -p ${JIRA_HOME}/caches/indexes \
              ${JIRA_INSTALL}/lib
 
 # install glibc using origin sources
-RUN apk add --update ca-certificates mc gzip curl tar xmlstarlet wget tzdata bash tini && \
-    export GLIBC_VERSION=2.26-r0 && \
+RUN export GLIBC_VERSION=2.26-r0 && \
+    apk add --update ca-certificates mc gzip curl tar xmlstarlet wget tzdata bash tini && \
     wget -q --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
     wget -q --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
     wget -q --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk && \
