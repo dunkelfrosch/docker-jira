@@ -30,6 +30,7 @@ ENV TERM="xterm" \
     TIMEZONE="Europe/Berlin" \
     JIRA_USER=jira \
     JIRA_GROUP=jira \
+    JIRA_CROWD_SSO=false \
     JIRA_CONTEXT_PATH=ROOT \
     JIRA_HOME=/var/atlassian/jira \
     JIRA_INSTALL=/opt/jira \
