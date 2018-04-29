@@ -90,8 +90,7 @@ RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     chown -R $JIRA_USER:$JIRA_GROUP /home/${JIRA_USER}
 
 # cleanUp
-RUN apk del ca-certificates gzip wget && \
-    rm -rf /var/cache/apk/* && \
+RUN rm -rf /var/cache/apk/* && \
     rm -rf /tmp/* &&  \
     rm -rf /var/log/*
 
