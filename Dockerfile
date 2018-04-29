@@ -9,6 +9,7 @@
 # --
 # testblock_01_SOB
 # --
+FROM blacklabelops/alpine:3.7
 
 # Note that you also need to update buildscripts/release.sh when the
 # Jira version changes
