@@ -65,7 +65,7 @@ RUN apk add --update                                    \
     apk add --allow-untrusted /tmp/glibc-bin-${GLIBC_VERSION}.apk && \
     wget --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk && \
     apk --allow-untrusted add /tmp/glibc-i18n-${GLIBC_VERSION}.apk && \
-    /usr/glibc-compat/bin/localedef -i ${LANG_LANGUAGE}_${LANG_COUNTRY} -f UTF-8 ${LANG_LANGUAGE}_${LANG_COUNTRY}.UTF-8 && \
+    /usr/glibc-compat/bin/localedef -i ${ISO_LANGUAGE}_${ISO_COUNTRY} -f UTF-8 ${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8 && \
     # Install Jira
     export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     mkdir -p ${JIRA_HOME}                           &&  \
