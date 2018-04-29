@@ -11,15 +11,15 @@
 # --
 FROM blacklabelops/alpine:3.7
 
-# Note that you also need to update buildscripts/release.sh when the
-# Jira version changes
+ARG ISO_LANGUAGE=en
+ARG ISO_COUNTRY=US
 ARG JIRA_VERSION=7.9.1
 ARG JIRA_PRODUCT=jira-software
+ARG MYSQL_CONNECTOR_VERSION=5.1.46
+ARG DOCKERIZE_VERSION=v0.6.1
 ARG CONTAINER_UID=1000
 ARG CONTAINER_GID=1000
 ARG BUILD_DATE=undefined
-ARG LANG_LANGUAGE=en
-ARG LANG_COUNTRY=US
 
 ENV TERM="xterm" \
     TIMEZONE="Europe/Berlin" \
@@ -79,7 +79,7 @@ RUN apk add --update                                    \
       ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
     wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
       http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
-    tar xzf /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz                                              \
+    tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
       --directory=/tmp                                                                                        &&  \
     cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
       ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar                                &&  \
