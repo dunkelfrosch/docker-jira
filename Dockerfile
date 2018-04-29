@@ -3,7 +3,7 @@
 # OS/CORE  : blacklabelops/alpine:3.7
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.7
+# VERSION 1.0.8
 #
 
 FROM dunkelfrosch/alpine:3.7
@@ -50,12 +50,12 @@ RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     # Install database drivers
     rm -f                                               \
       ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
-    wget -O /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz                                              \
-      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz      &&  \
-    tar xzf /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz                                              \
+    wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
+      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
+    tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
       --directory=/tmp                                                                                        &&  \
-    cp /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}/mysql-connector-java-${MYSQL_DRIVER_VERSION}-bin.jar     \
-      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_DRIVER_VERSION}-bin.jar                                &&  \
+    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
+      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar                                &&  \
     # Add user
     export CONTAINER_USER=jira                      &&  \
     export CONTAINER_UID=1000                       &&  \
@@ -94,6 +94,22 @@ RUN apk del ca-certificates gzip wget && \
     rm -rf /var/cache/apk/* && \
     rm -rf /tmp/* &&  \
     rm -rf /var/log/*
+
+# --
+# define image ext labels
+# --
+LABEL com.container.vendor="dunkelfrosch impersonate" \
+      com.container.service="atlassian/jira" \
+      com.container.service.verion="7.9.1" \
+      com.container.priority="1" \
+      com.container.project="jira" \
+      img.builddate="${BUILD_DATE}" \
+      img.version="1.0.8" \
+      img.description="atlassian jira application container"
+
+# --
+# define container execution behaviour
+# --
 
 USER jira
 WORKDIR ${JIRA_HOME}
