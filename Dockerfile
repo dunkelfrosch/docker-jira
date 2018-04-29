@@ -43,9 +43,6 @@ RUN mkdir -p ${JIRA_HOME}/caches/indexes \
 
 COPY scripts/* ${JIRA_SCRIPTS}/
 
-# --
-# testblock_01_SOB
-# --
 # install glibc using origin sources
 RUN export GLIBC_VERSION=2.26-r0 && \
     apk add --update ca-certificates gzip curl xmlstarlet wget tzdata tini && \
@@ -58,28 +55,30 @@ RUN export GLIBC_VERSION=2.26-r0 && \
     /usr/glibc-compat/bin/localedef -i ${ISO_LANGUAGE}_${ISO_COUNTRY} -f UTF-8 ${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8 && \
     cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
     echo "${TIMEZONE}" >/etc/timezone
+
+# --
+# testblock_01_SOB
+# --
+# install jira using origin atlassian (bin) installer
+RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
+    wget -q -P /tmp/ https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
+    mv /tmp/${JIRA_BIN} /tmp/jira.bin && \
+    chmod +x /tmp/jira.bin && /tmp/jira.bin -q -varfile ${JIRA_SCRIPTS}/response.varfile
+
+# install mysql connector (using java-origin tar.gz)
+RUN export MYSQL_CONNECTOR=mysql-connector-java-${MYSQL_CONNECTOR_VERSION:-5.1.36} && \
+    export MYSQL_CONNECTOR_TAR=${MYSQL_CONNECTOR}.tar.gz && \
+    export MYSQL_CONNECTOR_BIN=${MYSQL_CONNECTOR}-bin.jar && \
+    rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
+    wget -q -O /tmp/${MYSQL_CONNECTOR_TAR} ${MYSQL_CONNECTOR_URL}/${MYSQL_CONNECTOR_TAR} && \
+    tar xzf /tmp/${MYSQL_CONNECTOR_TAR} --directory=/tmp && \
+    cp /tmp/${MYSQL_CONNECTOR}/${MYSQL_CONNECTOR_BIN} ${JIRA_INSTALL}/lib/${MYSQL_CONNECTOR_BIN}
 # --
 # testblock_01_EOB
 # --
 
-RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
-    mkdir -p ${JIRA_HOME}                           &&  \
-    mkdir -p ${JIRA_INSTALL}                        &&  \
-    wget -O /tmp/jira.bin https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
-    chmod +x /tmp/jira.bin                          &&  \
-    /tmp/jira.bin -q -varfile                           \
-      ${JIRA_SCRIPTS}/response.varfile              &&  \
-    # Install database drivers
-    rm -f                                               \
-      ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
-    wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
-      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
-    tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
-      --directory=/tmp                                                                                        &&  \
-    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
-      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar                                &&  \
-    # Add user
-    export CONTAINER_USER=jira                      &&  \
+
+RUN export CONTAINER_USER=jira                      &&  \
     export CONTAINER_UID=1000                       &&  \
     export CONTAINER_GROUP=jira                     &&  \
     export CONTAINER_GID=1000                       &&  \
