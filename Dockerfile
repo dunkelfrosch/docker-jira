@@ -3,7 +3,7 @@
 # OS/CORE  : blacklabelops/alpine:3.7
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.8
+# VERSION 1.0.9
 #
 
 FROM dunkelfrosch/alpine:3.7
@@ -40,36 +40,24 @@ RUN mkdir -p ${JIRA_HOME}/caches/indexes \
              ${JIRA_INSTALL}/conf/Catalina \
              ${JIRA_INSTALL}/lib
 
-RUN apk add --update ca-certificates gzip curl tini wget xmlstarlet
-
 RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
-    mkdir -p ${JIRA_HOME}                           &&  \
-    mkdir -p ${JIRA_INSTALL}                        &&  \
-    wget -O /tmp/jira.bin https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
-    chmod +x /tmp/jira.bin                          &&  \
-    /tmp/jira.bin -q -varfile                           \
-      ${JIRA_SCRIPTS}/response.varfile              &&  \
-    # Install database drivers
-    rm -f                                               \
-      ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
-    wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
-      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
-    tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
-      --directory=/tmp                                                                                        &&  \
-    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
-      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar                                &&  \
-    # Add user
-    export CONTAINER_USER=jira                      &&  \
-    export CONTAINER_UID=1000                       &&  \
-    export CONTAINER_GROUP=jira                     &&  \
-    export CONTAINER_GID=1000                       &&  \
-    addgroup -g $CONTAINER_GID $CONTAINER_GROUP     &&  \
-    adduser -u $CONTAINER_UID                           \
-            -G $CONTAINER_GROUP                         \
-            -h /home/$CONTAINER_USER                    \
-            -s /bin/bash                                \
-            -S $CONTAINER_USER                      &&  \
-    # Adding letsencrypt-ca to truststore
+    apk add --update ca-certificates gzip curl tini wget xmlstarlet && \
+    wget -O /tmp/jira.bin https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && chmod +x /tmp/jira.bin && \
+    /tmp/jira.bin -q -varfile ${JIRA_SCRIPTS}/response.varfile && \
+    rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
+    wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz && \
+    tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz --directory=/tmp && \
+    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
+    export CONTAINER_USER=jira && \
+    export CONTAINER_UID=1000 && \
+    export CONTAINER_GROUP=jira && \
+    export CONTAINER_GID=1000 && \
+    addgroup -g $CONTAINER_GID $CONTAINER_GROUP && \
+    adduser -u $CONTAINER_UID \
+            -G $CONTAINER_GROUP \
+            -h /home/$CONTAINER_USER \
+            -s /bin/bash \
+            -S $CONTAINER_USER && \
     export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
     wget -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
     wget -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
@@ -83,34 +71,35 @@ RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias letsencryptauthorityx2 -file /tmp/lets-encrypt-x2-cross-signed.der && \
     keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias letsencryptauthorityx3 -file /tmp/lets-encrypt-x3-cross-signed.der && \
     keytool -trustcacerts -keystore $KEYSTORE -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der && \
-    # Install atlassian ssl tool
     wget -O /home/${JIRA_USER}/SSLPoke.class https://confluence.atlassian.com/kb/files/779355358/779355357/1/1441897666313/SSLPoke.class && \
-    # Set permissions
-    chown -R $JIRA_USER:$JIRA_GROUP ${JIRA_HOME}    &&  \
-    chown -R $JIRA_USER:$JIRA_GROUP ${JIRA_INSTALL} &&  \
-    chown -R $JIRA_USER:$JIRA_GROUP ${JIRA_SCRIPTS} &&  \
-    chown -R $JIRA_USER:$JIRA_GROUP /home/${JIRA_USER}
 
 # cleanUp
-RUN rm -rf /var/cache/apk/* && \
+RUN apk del ca-certificates gzip wget && \
+    rm -rf /var/cache/apk/* && \
     rm -rf /tmp/* &&  \
     rm -rf /var/log/*
 
-# --
+# change ownership of bin/home files
+RUN chown -R ${JIRA_USER}:${JIRA_GROUP} ${JIRA_HOME} \
+                                        ${JIRA_INSTALL} \
+                                        ${JIRA_SCRIPTS} \
+                                        /home/${JIRA_USER}
+
+# ---------------------------------------------------------------------------------------------------------------------
 # define image ext labels
-# --
+# ---------------------------------------------------------------------------------------------------------------------
 LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.service="atlassian/jira" \
       com.container.service.verion="7.9.1" \
       com.container.priority="1" \
       com.container.project="jira" \
       img.builddate="${BUILD_DATE}" \
-      img.version="1.0.8" \
+      img.version="1.0.9" \
       img.description="atlassian jira application container"
 
-# --
+# ---------------------------------------------------------------------------------------------------------------------
 # define container execution behaviour
-# --
+# ---------------------------------------------------------------------------------------------------------------------
 
 USER jira
 WORKDIR ${JIRA_HOME}
