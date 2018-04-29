@@ -65,18 +65,16 @@ RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     mv /tmp/${JIRA_BIN} /tmp/jira.bin && \
     chmod +x /tmp/jira.bin && /tmp/jira.bin -q -varfile ${JIRA_SCRIPTS}/response.varfile
 
-# install mysql connector (using java-origin tar.gz)
-RUN export MYSQL_CONNECTOR=mysql-connector-java-${MYSQL_CONNECTOR_VERSION:-5.1.36} && \
-    export MYSQL_CONNECTOR_TAR=${MYSQL_CONNECTOR}.tar.gz && \
-    export MYSQL_CONNECTOR_BIN=${MYSQL_CONNECTOR}-bin.jar && \
-    rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar && \
-    wget -q -O /tmp/${MYSQL_CONNECTOR_TAR} ${MYSQL_CONNECTOR_URL}/${MYSQL_CONNECTOR_TAR} && \
-    tar xzf /tmp/${MYSQL_CONNECTOR_TAR} --directory=/tmp && \
-    cp /tmp/${MYSQL_CONNECTOR}/${MYSQL_CONNECTOR_BIN} ${JIRA_INSTALL}/lib/${MYSQL_CONNECTOR_BIN}
+RUN rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
+    wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
+      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
+    tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
+      --directory=/tmp                                                                                        &&  \
+    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
+      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar
 # --
 # testblock_01_EOB
 # --
-
 
 RUN export CONTAINER_USER=jira                      &&  \
     export CONTAINER_UID=1000                       &&  \
