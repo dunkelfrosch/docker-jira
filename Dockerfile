@@ -61,17 +61,20 @@ RUN export GLIBC_VERSION=2.26-r0 && \
 # --
 # install jira using origin atlassian (bin) installer
 RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
-    wget -q -P /tmp/ https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
-    mv /tmp/${JIRA_BIN} /tmp/jira.bin && \
-    chmod +x /tmp/jira.bin && /tmp/jira.bin -q -varfile ${JIRA_SCRIPTS}/response.varfile
-
-RUN rm -f ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
-    wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
-      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
-    tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
-      --directory=/tmp                                                                                        &&  \
-    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
-      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar
+        mkdir -p ${JIRA_HOME}                           &&  \
+        mkdir -p ${JIRA_INSTALL}                        &&  \
+        wget -O /tmp/jira.bin https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
+        chmod +x /tmp/jira.bin                          &&  \
+        /tmp/jira.bin -q -varfile                           \
+          ${JIRA_SCRIPTS}/response.varfile              &&  \
+        rm -f                                               \
+          ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
+        wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
+          http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
+        tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
+          --directory=/tmp                                                                                        &&  \
+        cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
+          ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar
 # --
 # testblock_01_EOB
 # --
