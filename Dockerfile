@@ -56,22 +56,6 @@ RUN export GLIBC_VERSION=2.26-r0 && \
     cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
     echo "${TIMEZONE}" >/etc/timezone
 
-# install/setup keystore using host based letsencrypt CA (for growd sso)
-RUN export KEYSTORE=${JAVA_HOME}/lib/security/cacerts && \
-    wget -q -O /SSLPoke.class https://confluence.atlassian.com/kb/files/779355358/779355357/1/1441897666313/SSLPoke.class && \
-    wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
-    wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
-    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.der && \
-    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x2-cross-signed.der && \
-    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.der && \
-    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x4-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx1 -file /tmp/letsencryptauthorityx1.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx2 -file /tmp/letsencryptauthorityx2.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx1 -file /tmp/lets-encrypt-x1-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx2 -file /tmp/lets-encrypt-x2-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx3 -file /tmp/lets-encrypt-x3-cross-signed.der && \
-    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der
-
 # --
 # testblock_01_SOB
 # --
@@ -117,6 +101,23 @@ RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     rm -rf /var/cache/apk/*                         &&  \
     rm -rf /tmp/*                                   &&  \
     rm -rf /var/log/*
+
+# install/setup keystore using host based letsencrypt CA (for growd sso)
+RUN export KEYSTORE=${JAVA_HOME}/lib/security/cacerts && \
+    wget -q -O /SSLPoke.class https://confluence.atlassian.com/kb/files/779355358/779355357/1/1441897666313/SSLPoke.class && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x2-cross-signed.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.der && \
+    wget -q -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x4-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx1 -file /tmp/letsencryptauthorityx1.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias isrgrootx2 -file /tmp/letsencryptauthorityx2.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx1 -file /tmp/lets-encrypt-x1-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx2 -file /tmp/lets-encrypt-x2-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx3 -file /tmp/lets-encrypt-x3-cross-signed.der && \
+    keytool -trustcacerts -keystore ${KEYSTORE} -storepass changeit -noprompt -importcert -alias letsencryptauthorityx4 -file /tmp/lets-encrypt-x4-cross-signed.der
+
 # --
 # testblock_01_EOB
 # --
