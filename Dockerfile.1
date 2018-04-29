@@ -1,53 +1,33 @@
-#
-# BUILD    : DF/[ATLASSIAN][JIRA]
-# OS/CORE  : blacklabelops/alpine:3.7
-# SERVICES : ntp, ...
-#
-# VERSION 1.0.7
-#
-
-# --
-# testblock_01_SOB
-# --
+FROM blacklabelops/alpine:3.7
+MAINTAINER Steffen Bleul <sbl@blacklabelops.com>
 
 # Note that you also need to update buildscripts/release.sh when the
 # Jira version changes
 ARG JIRA_VERSION=7.9.1
 ARG JIRA_PRODUCT=jira-software
+# Permissions, set the linux user id and group id
 ARG CONTAINER_UID=1000
 ARG CONTAINER_GID=1000
+# Image Build Date By Buildsystem
 ARG BUILD_DATE=undefined
+# Language Settings
 ARG LANG_LANGUAGE=en
 ARG LANG_COUNTRY=US
 
-ENV TERM="xterm" \
-    TIMEZONE="Europe/Berlin" \
-    JIRA_USER=jira \
-    JIRA_GROUP=jira \
-    JIRA_CROWD_SSO=false \
-    JIRA_CONTEXT_PATH=ROOT \
-    JIRA_HOME=/var/atlassian/jira \
-    JIRA_INSTALL=/opt/jira \
-    JIRA_SCRIPTS=/usr/local/share/atlassian \
-    MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
-    DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary"
-
+ENV JIRA_USER=jira                            \
+    JIRA_GROUP=jira                           \
+    JIRA_CONTEXT_PATH=ROOT                    \
+    JIRA_HOME=/var/atlassian/jira             \
+    JIRA_INSTALL=/opt/jira                    \
+    JIRA_SCRIPTS=/usr/local/share/atlassian   \
+    MYSQL_DRIVER_VERSION=5.1.46               \
+    DOCKERIZE_VERSION=v0.6.1
 ENV JAVA_HOME=$JIRA_INSTALL/jre
+
 ENV PATH=$PATH:$JAVA_HOME/bin \
-    LANG=${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8
+    LANG=${LANG_LANGUAGE}_${LANG_COUNTRY}.UTF-8
 
-COPY scripts/* ${JIRA_SCRIPTS}/
-
-# prepare directories
-RUN mkdir -p ${JIRA_HOME}/caches/indexes \
-             ${JIRA_INSTALL}/conf/Catalina \
-             ${JIRA_INSTALL}/lib
-
-COPY scripts/* ${JIRA_SCRIPTS}/
-
-# --
-# testblock_01_EOB
-# --
+COPY imagescripts ${JIRA_SCRIPTS}
 
 RUN apk add --update                                    \
       ca-certificates                                   \
@@ -76,12 +56,12 @@ RUN apk add --update                                    \
     # Install database drivers
     rm -f                                               \
       ${JIRA_INSTALL}/lib/mysql-connector-java*.jar &&  \
-    wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz                                              \
-      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz      &&  \
+    wget -O /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz                                              \
+      http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz      &&  \
     tar xzf /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}.tar.gz                                              \
       --directory=/tmp                                                                                        &&  \
-    cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar     \
-      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar                                &&  \
+    cp /tmp/mysql-connector-java-${MYSQL_DRIVER_VERSION}/mysql-connector-java-${MYSQL_DRIVER_VERSION}-bin.jar     \
+      ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_DRIVER_VERSION}-bin.jar                                &&  \
     # Add user
     export CONTAINER_USER=jira                      &&  \
     export CONTAINER_UID=1000                       &&  \
@@ -138,5 +118,5 @@ USER jira
 WORKDIR ${JIRA_HOME}
 VOLUME ["/var/atlassian/jira"]
 EXPOSE 8080
-ENTRYPOINT ["/sbin/tini","--","/usr/local/share/atlassian/entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini","--","/usr/local/share/atlassian/docker-entrypoint.sh"]
 CMD ["jira"]
