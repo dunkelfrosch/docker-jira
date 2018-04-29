@@ -6,9 +6,6 @@
 # VERSION 1.0.7
 #
 
-# --
-# testblock_01_SOB
-# --
 FROM blacklabelops/alpine:3.7
 
 ARG ISO_LANGUAGE=en
@@ -47,27 +44,25 @@ RUN mkdir -p ${JIRA_HOME}/caches/indexes \
 COPY scripts/* ${JIRA_SCRIPTS}/
 
 # --
+# testblock_01_SOB
+# --
+# install glibc using origin sources
+RUN export GLIBC_VERSION=2.26-r0 && \
+    apk add --update ca-certificates gzip curl xmlstarlet wget tzdata tini && \
+    wget -q --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
+    wget -q --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
+    wget -q --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk && \
+    apk add --allow-untrusted /tmp/glibc-${GLIBC_VERSION}.apk && \
+    apk add --allow-untrusted /tmp/glibc-bin-${GLIBC_VERSION}.apk && \
+    apk add --allow-untrusted /tmp/glibc-i18n-${GLIBC_VERSION}.apk && \
+    /usr/glibc-compat/bin/localedef -i ${ISO_LANGUAGE}_${ISO_COUNTRY} -f UTF-8 ${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8 && \
+    cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
+    echo "${TIMEZONE}" >/etc/timezone
+# --
 # testblock_01_EOB
 # --
 
-RUN apk add --update                                    \
-      ca-certificates                                   \
-      gzip                                              \
-      curl                                              \
-      tini                                              \
-      wget                                              \
-      xmlstarlet                                    &&  \
-    # Install latest glibc
-    export GLIBC_VERSION=2.26-r0 && \
-    wget --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
-    apk add --allow-untrusted /tmp/glibc-${GLIBC_VERSION}.apk && \
-    wget --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
-    apk add --allow-untrusted /tmp/glibc-bin-${GLIBC_VERSION}.apk && \
-    wget --directory-prefix=/tmp https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk && \
-    apk --allow-untrusted add /tmp/glibc-i18n-${GLIBC_VERSION}.apk && \
-    /usr/glibc-compat/bin/localedef -i ${ISO_LANGUAGE}_${ISO_COUNTRY} -f UTF-8 ${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8 && \
-    # Install Jira
-    export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
+RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     mkdir -p ${JIRA_HOME}                           &&  \
     mkdir -p ${JIRA_INSTALL}                        &&  \
     wget -O /tmp/jira.bin https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && \
