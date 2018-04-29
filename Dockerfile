@@ -3,10 +3,11 @@
 # OS/CORE  : blacklabelops/alpine:3.7
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.9
+# VERSION 1.1.0
 #
 
 FROM dunkelfrosch/alpine:3.7
+MAINTAINER Steffen Bleul <sbl@blacklabelops.com>
 
 ARG ISO_LANGUAGE=en
 ARG ISO_COUNTRY=US
@@ -40,7 +41,12 @@ RUN mkdir -p ${JIRA_HOME}/caches/indexes \
              ${JIRA_INSTALL}/conf/Catalina \
              ${JIRA_INSTALL}/lib
 
-RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
+RUN export CONTAINER_USER=jira && \
+    export CONTAINER_UID=1000 && \
+    export CONTAINER_GROUP=jira && \
+    export CONTAINER_GID=1000 && \
+    export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
+    export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
     apk add --update ca-certificates gzip curl tini wget xmlstarlet && \
     wget -O /tmp/jira.bin https://www.atlassian.com/software/jira/downloads/binary/${JIRA_BIN} && chmod +x /tmp/jira.bin && \
     /tmp/jira.bin -q -varfile ${JIRA_SCRIPTS}/response.varfile && \
@@ -48,17 +54,8 @@ RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     wget -O /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz && \
     tar xzf /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.tar.gz --directory=/tmp && \
     cp /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar ${JIRA_INSTALL}/lib/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}-bin.jar && \
-    export CONTAINER_USER=jira && \
-    export CONTAINER_UID=1000 && \
-    export CONTAINER_GROUP=jira && \
-    export CONTAINER_GID=1000 && \
     addgroup -g $CONTAINER_GID $CONTAINER_GROUP && \
-    adduser -u $CONTAINER_UID \
-            -G $CONTAINER_GROUP \
-            -h /home/$CONTAINER_USER \
-            -s /bin/bash \
-            -S $CONTAINER_USER && \
-    export KEYSTORE=$JAVA_HOME/lib/security/cacerts && \
+    adduser  -u $CONTAINER_UID -G $CONTAINER_GROUP -h /home/$CONTAINER_USER -s /bin/bash -S $CONTAINER_USER && \
     wget -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx1.der && \
     wget -P /tmp/ https://letsencrypt.org/certs/letsencryptauthorityx2.der && \
     wget -P /tmp/ https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.der && \
@@ -88,7 +85,7 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.priority="1" \
       com.container.project="jira" \
       img.builddate="${BUILD_DATE}" \
-      img.version="1.0.9" \
+      img.version="1.1.0" \
       img.description="atlassian jira application container"
 
 # ---------------------------------------------------------------------------------------------------------------------
