@@ -3,19 +3,12 @@
 # OS/CORE  : blacklabelops/alpine:3.7
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.6
+# VERSION 1.0.7
 #
 
 FROM blacklabelops/alpine:3.7
 
 MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
-LABEL com.container.vendor="dunkelfrosch impersonate" \
-      com.container.service="atlassian/jira" \
-      com.container.service.verion="7.9.1" \
-      com.container.priority="1" \
-      com.container.project="jira" \
-      img.version="1.0.6" \
-      img.description="atlassian jira application container"
 
 ARG ISO_LANGUAGE=en
 ARG ISO_COUNTRY=US
@@ -25,6 +18,7 @@ ARG MYSQL_CONNECTOR_VERSION=5.1.46
 ARG DOCKERIZE_VERSION=v0.6.1
 ARG CONTAINER_UID=1000
 ARG CONTAINER_GID=1000
+ARG BUILD_DATE=undefined
 
 ENV TERM="xterm" \
     TIMEZONE="Europe/Berlin" \
@@ -38,8 +32,8 @@ ENV TERM="xterm" \
     MYSQL_CONNECTOR_URL="http://dev.mysql.com/get/Downloads/Connector-J" \
     DOWNLOAD_URL="https://www.atlassian.com/software/jira/downloads/binary"
 
-ENV JAVA_HOME=${JIRA_INSTALL}/jre
-ENV PATH=$PATH:${JAVA_HOME}/bin \
+ENV JAVA_HOME=$JIRA_INSTALL/jre
+ENV PATH=$PATH:$JAVA_HOME/bin \
     LANG=${ISO_LANGUAGE}_${ISO_COUNTRY}.UTF-8
 
 COPY scripts/* ${JIRA_SCRIPTS}/
@@ -111,7 +105,8 @@ RUN chown -R ${JIRA_USER}:${JIRA_GROUP} ${JIRA_HOME} ${JIRA_INSTALL} ${JIRA_SCRI
 
 # install (upgrade) new dockerized toolbox
 RUN wget -q -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
-    tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz
+    tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz && \
+    rm /tmp/dockerize.tar.gz
 
 # cleanUp
 RUN apk del ca-certificates gzip wget && \
@@ -120,17 +115,27 @@ RUN apk del ca-certificates gzip wget && \
     rm -rf /var/log/*
 
 # --
+# define image ext labels
+# --
+LABEL com.container.vendor="dunkelfrosch impersonate" \
+      com.container.service="atlassian/jira" \
+      com.container.service.verion="7.9.1" \
+      com.container.priority="1" \
+      com.container.project="jira" \
+      com.blacklabelops.application.jira.version=$JIRA_PRODUCT-$JIRA_VERSION \
+      com.blacklabelops.application.jira.userid=$CONTAINER_UID \
+      com.blacklabelops.application.jira.groupid=$CONTAINER_GID \
+      com.blacklabelops.image.builddate.jira="29/04/2018-11:29+0200" \
+      img.version="1.0.7" \
+      img.description="atlassian jira application container"
+
+# --
 # define container execution behaviour
 # --
 
-USER ${JIRA_USER:-jira}
-
-VOLUME ["${JIRA_HOME}"]
-
+USER jira
 WORKDIR ${JIRA_HOME}
-
+VOLUME ["/var/atlassian/jira"]
 EXPOSE 8080
-
-ENTRYPOINT ["/sbin/tini", "--", "/usr/local/share/atlassian/entrypoint.sh"]
-
+ENTRYPOINT ["/sbin/tini","--","/usr/local/share/atlassian/entrypoint.sh"]
 CMD ["jira"]
