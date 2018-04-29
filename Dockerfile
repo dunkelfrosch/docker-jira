@@ -40,6 +40,8 @@ RUN mkdir -p ${JIRA_HOME}/caches/indexes \
              ${JIRA_INSTALL}/conf/Catalina \
              ${JIRA_INSTALL}/lib
 
+RUN RUN apk add --update ca-certificates gzip curl tini wget xmlstarlet
+
 RUN export JIRA_BIN=atlassian-${JIRA_PRODUCT}-${JIRA_VERSION}-x64.bin && \
     mkdir -p ${JIRA_HOME}                           &&  \
     mkdir -p ${JIRA_INSTALL}                        &&  \
