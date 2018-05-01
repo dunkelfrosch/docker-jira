@@ -1,7 +1,7 @@
 sudo: required
 
 env:
-  COMPOSE_VERSION: 1.10.0
+  COMPOSE_VERSION: 1.12.0
 
 services:
   - docker
@@ -12,9 +12,8 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 script:
-  # check normal docker build
-  - docker build -t dunkelfrosch/jira .
-  - docker run --name df_jira -d -p 127.0.0.1:8080:8080 dunkelfrosch/jira
+  - docker build -t dunkelfrosch/jira:test .
+  - docker run --name df_jira -d -p 127.0.0.1:8080:8080 dunkelfrosch/jira:test
   - docker ps | grep "df_jira"
   - docker logs df_jira
   - docker ps -aq | xargs docker rm -fv
