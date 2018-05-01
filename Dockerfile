@@ -7,7 +7,7 @@
 #
 
 FROM dunkelfrosch/alpine:3.7
-MAINTAINER Steffen Bleul <sbl@blacklabelops.com>
+MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 
 ARG ISO_LANGUAGE=en
 ARG ISO_COUNTRY=US
