@@ -5,8 +5,16 @@ All notable changes of the DockerJira release series are documented in this file
 _This DockerJira changeLog documentation start with version 0.9.6 (2015-12-26)_
 
 
-## [1.0.3], 2018-04-17
+## [1.0.4], 2018-04-17
 _current_
+
+### Changes
+- upgrade jira to version 7.9.1
+- refactor dockerfile structure
+- minor changes in documentation
+
+
+## [1.0.3], 2018-04-17
 
 ### Changes
 - upgrade jira to version 7.9 (7.9.0)
