@@ -25,7 +25,7 @@ These steps will show you the generic, pure docker-based installation of Atlassi
 git clone https://github.com/dunkelfrosch/docker-jira.git .
 ```
 
-2.1) build your JIRA image (version 7.3.0) on your local docker host, naming image "dunkelfrosch/jira:7.3.0" (or 'latest')
+2.1) build your JIRA image (version 7.9.1) on your local docker host, naming image "dunkelfrosch/jira:7.9.1" (or 'latest')
 
 ```bash
 docker build -t dunkelfrosch/jira:latest
@@ -115,7 +115,7 @@ docker-compose up -d jira
 4) (*optional*) rename the resulting image after successful build (we'll use our image auto-name result here)
 
 ```bash
-docker tag dfdockerjira_jira dunkelfrosch/jira:7.3.0
+docker tag dfdockerjira_jira dunkelfrosch/jira:latest
 ```
 
 5) the result should by a running container and an available local JIRA image
