@@ -3,7 +3,7 @@
 # OS/CORE  : dunkelfrosch/alpine:3.7
 # SERVICES : ntp, ...
 #
-# VERSION 1.1.1
+# VERSION 1.0.5
 #
 
 FROM dunkelfrosch/alpine:3.7
@@ -81,7 +81,7 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.priority="1" \
       com.container.project="jira" \
       img.builddate="${BUILD_DATE}" \
-      img.version="1.1.1" \
+      img.version="1.0.5" \
       img.description="atlassian jira application container"
 
 # ---------------------------------------------------------------------------------------------------------------------
