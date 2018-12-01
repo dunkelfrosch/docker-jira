@@ -1,15 +1,20 @@
-# ChangeLog of DockerJira 7.10.2
+# ChangeLog of DockerJira 7.13.0
 
 All notable changes of the DockerJira release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 _This DockerJira changeLog documentation start with version 0.9.6 (2015-12-26)_
 
-## [1.0.5], 2018-07-01
+
+## [1.0.6], 2018-12-01
 _current_
 
 ### Changes
-- upgrade jira to version 7.10.2
+- upgrade jira to version 7.13.0
 
+## [1.0.5], 2018-07-01
+
+### Changes
+- upgrade jira to version 7.10.2
 
 ## [1.0.4], 2018-04-17
 

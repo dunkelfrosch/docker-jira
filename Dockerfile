@@ -3,7 +3,7 @@
 # OS/CORE  : dunkelfrosch/alpine:3.7
 # SERVICES : ntp, ...
 #
-# VERSION 1.0.5
+# VERSION 1.0.6
 #
 
 FROM dunkelfrosch/alpine:3.7
@@ -11,7 +11,7 @@ MAINTAINER Patrick Paechnatz <patrick.paechnatz@gmail.com>
 
 ARG ISO_LANGUAGE=en
 ARG ISO_COUNTRY=US
-ARG JIRA_VERSION=7.10.2
+ARG JIRA_VERSION=7.13.0
 ARG JIRA_PRODUCT=jira-software
 ARG MYSQL_CONNECTOR_VERSION=5.1.46
 ARG BUILD_DATE=undefined
@@ -81,7 +81,7 @@ LABEL com.container.vendor="dunkelfrosch impersonate" \
       com.container.priority="1" \
       com.container.project="jira" \
       img.builddate="${BUILD_DATE}" \
-      img.version="1.0.5" \
+      img.version="1.0.6" \
       img.description="atlassian jira application container"
 
 # ---------------------------------------------------------------------------------------------------------------------
